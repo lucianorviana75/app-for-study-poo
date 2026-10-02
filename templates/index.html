@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de POO Python</title>
+    
+    <!-- Importação do Three.js para renderização 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Carregamento do CSS via Flask/Static -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        /* Estilos de emergência caso o style.css externo falhe */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Layout Principal dividido em 2 colunas */
+        .app-container { display: flex; width: 100vw; height: 100vh; }
+        .sidebar { width: 380px; background: #1e293b; padding: 20px; overflow-y: auto; border-right: 1px solid #334155; display: flex; flex-direction: column; gap: 15px; }
+        .main-content { flex: 1; display: flex; flex-direction: column; background: #090d16; position: relative; }
+        
+        /* Cards do Painel Lateral */
+        .section-card { background: #0f172a; border: 1px solid #334155; padding: 15px; border-radius: 8px; }
+        .section-card h3 { font-size: 1rem; margin-bottom: 10px; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
+        
+        /* Formulários e Inputs */
+        input, textarea { width: 100%; background: #1e293b; border: 1px solid #475569; color: #fff; padding: 8px 12px; border-radius: 6px; margin-bottom: 8px; font-size: 0.85rem; }
+        input:focus, textarea:focus { outline: none; border-color: #38bdf8; }
+        textarea { height: 60px; resize: vertical; }
+        .form-row { display: flex; gap: 8px; }
+        
+        /* Botões */
+        button { cursor: pointer; border: none; border-radius: 6px; padding: 8px 12px; font-weight: 600; font-size: 0.85rem; transition: all 0.2s; }
+        .btn-primary { background: #0284c7; color: white; width: 100%; }
+        .btn-primary:hover { background: #0369a1; }
+        .btn-secondary { background: #334155; color: #38bdf8; width: 100%; border: 1px solid #38bdf8; }
+        .btn-secondary:hover { background: #38bdf8; color: #0f172a; }
+        
+        /* Lista de Itens Cadastrados com Botões de Edição/Remoção */
+        .items-list { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+        .item-card { display: flex; justify-content: space-between; align-items: center; background: #1e293b; border: 1px solid #334155; padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; }
+        .item-card span { color: #e2e8f0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 220px; }
+        .btn-sm-action { background: #0284c7; color: white; padding: 3px 6px; border-radius: 4px; font-size: 0.75rem; margin-left: 4px; }
+        .btn-del { background: #ef4444; color: white; padding: 3px 6px; border-radius: 4px; font-size: 0.75rem; margin-left: 4px; }
+        
+        /* Abas de Classes */
+        .class-tabs { display: flex; gap: 8px; padding: 10px 20px; background: #1e293b; border-bottom: 1px solid #334155; }
+        .class-tab { background: #0f172a; color: #94a3b8; border: 1px solid #334155; padding: 6px 16px; border-radius: 6px; }
+        .class-tab.active { background: #0284c7; color: white; border-color: #38bdf8; }
+        
+        /* Área Superior 3D e Código */
+        .top-display { display: flex; flex: 1; min-height: 0; }
+        #canvasContainer { flex: 1; position: relative; background: #050811; }
+        #canvas3d { width: 100%; height: 100%; display: block; }
+        #labelsOverlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        
+        .node-label { position: absolute; transform: translate(-50%, -50%); background: rgba(15, 23, 42, 0.85); border: 1px solid #38bdf8; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; white-space: nowrap; }
+        
+        .code-container { width: 420px; background: #0d1117; border-left: 1px solid #1e293b; display: flex; flex-direction: column; }
+        .code-header { padding: 10px 15px; background: #161b22; color: #38bdf8; font-weight: bold; font-size: 0.85rem; border-bottom: 1px solid #21262d; }
+        pre#pythonCode { padding: 15px; color: #7ee787; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.8rem; overflow: auto; flex: 1; margin: 0; }
+        
+        /* Terminal Inferior */
+        .terminal-container { height: 180px; background: #030712; border-top: 1px solid #1e293b; padding: 10px 15px; display: flex; flex-direction: column; }
+        .terminal-header { color: #10b981; font-weight: bold; font-size: 0.8rem; margin-bottom: 5px; display: flex; justify-content: space-between; }
+        pre#terminalOutput { color: #38bdf8; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.85rem; flex: 1; overflow-y: auto; margin: 0; white-space: pre-wrap; }
+        .terminal-prompt { color: #64748b; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <!-- PAINEL LATERAL DE CONFIGURAÇÃO (ESQUERDA) -->
+    <div class="sidebar">
+        <!-- 1. Nova Classe -->
+        <div class="section-card">
+            <h3>➕ Nova Classe</h3>
+            <input type="text" id="newClassName" placeholder="Ex: Carro (Inicie com MAIÚSCULA)">
+            <button id="btnCreateClass" class="btn-primary">Criar Classe</button>
+        </div>
+
+        <!-- 2. Atributos -->
+        <div class="section-card">
+            <h3>📌 Atributos</h3>
+            <div class="form-row">
+                <input type="text" id="attrName" placeholder="Nome (ex: cor)">
+                <input type="text" id="attrVal" placeholder="Valor (ex: 'vermelho')">
+            </div>
+            <button id="btnAddAttr" class="btn-secondary">+ Adicionar / Salvar Atributo</button>
+            <div id="listAttributes" class="items-list"></div>
+        </div>
+
+        <!-- 3. Métodos -->
+        <div class="section-card">
+            <h3>⚡ Métodos (Funções)</h3>
+            <input type="text" id="funcName" placeholder="Nome da função (ex: acelerar)">
+            <input type="text" id="funcParams" placeholder="Parâmetros (ex: velocidade)">
+            <textarea id="funcBody" placeholder="Código (ex: print(f'O carro {self.cor} esta a {velocidade} km/h'))"></textarea>
+            <input type="text" id="funcArgs" placeholder="Valor do parâmetro na chamada (ex: 60)">
+            
+            <button id="btnAddFunc" class="btn-secondary">+ Adicionar / Salvar Método</button>
+            <div id="listMethods" class="items-list"></div>
+        </div>
+    </div>
+
+    <!-- ÁREA PRINCIPAL (DIREITA) -->
+    <div class="main-content">
+        <!-- Abas das Classes -->
+        <div class="class-tabs" id="classTabs"></div>
+
+        <!-- Visualização 3D e Código Python -->
+        <div class="top-display">
+            <!-- Canvas 3D -->
+            <div id="canvasContainer">
+                <canvas id="canvas3d"></canvas>
+                <div id="labelsOverlay"></div>
+            </div>
+
+            <!-- Código Python Gerado -->
+            <div class="code-container">
+                <div class="code-header">CÓDIGO PYTHON GERADO</div>
+                <pre id="pythonCode"></pre>
+            </div>
+        </div>
+
+        <!-- Terminal de Execução (Print Output) -->
+        <div class="terminal-container">
+            <div class="terminal-header">
+                <span>>_ SAÍDA DA EXECUÇÃO DO CÓDIGO (PRINT)</span>
+                <span style="color: #64748b;">PYTHON RUNTIME</span>
+            </div>
+            <pre id="terminalOutput"></pre>
+        </div>
+    </div>
+</div>
+
+<!-- Carregamento do Script JavaScript Principal -->
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,357 @@
+/* ==========================================================================
+   RESET E CONFIGURAÇÕES GERAIS
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+body {
+    background-color: #0f172a;
+    color: #f8fafc;
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   LAYOUT PRINCIPAL
+   ========================================================================== */
+.app-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Painel Lateral (Formulários à Esquerda) */
+.sidebar {
+    width: 380px;
+    background: #1e293b;
+    padding: 20px;
+    overflow-y: auto;
+    border-right: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+/* Área Principal (3D, Código e Terminal) */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #090d16;
+    position: relative;
+    min-width: 0;
+}
+
+/* ==========================================================================
+   CARDS DE FORMULÁRIO E INPUTS
+   ========================================================================== */
+.section-card {
+    background: #0f172a;
+    border: 1px solid #334155;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.section-card h3 {
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    color: #38bdf8;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-row {
+    display: flex;
+    gap: 8px;
+}
+
+input, textarea {
+    width: 100%;
+    background: #1e293b;
+    border: 1px solid #475569;
+    color: #f8fafc;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input::placeholder, textarea::placeholder {
+    color: #64748b;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+}
+
+textarea {
+    height: 70px;
+    resize: vertical;
+    font-family: 'Consolas', 'Courier New', monospace;
+}
+
+/* ==========================================================================
+   BOTÕES
+   ========================================================================== */
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: #0284c7;
+    color: #ffffff;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background: #0369a1;
+}
+
+.btn-secondary {
+    background: #1e293b;
+    color: #38bdf8;
+    width: 100%;
+    border: 1px solid #38bdf8;
+}
+
+.btn-secondary:hover {
+    background: #38bdf8;
+    color: #0f172a;
+}
+
+/* ==========================================================================
+   LISTAS DE ITENS CADASTRADOS (ATRIBUTOS E MÉTODOS COM EDIÇÃO)
+   ========================================================================== */
+.items-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.item-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid #334155;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+}
+
+.item-card span {
+    color: #e2e8f0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 210px;
+}
+
+.item-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.btn-sm-action {
+    background: #0284c7;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.btn-sm-action:hover {
+    background: #0369a1;
+}
+
+.btn-del {
+    background: #ef4444;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.btn-del:hover {
+    background: #dc2626;
+}
+
+/* ==========================================================================
+   ABAS DE CLASSES (TOPO)
+   ========================================================================== */
+.class-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #1e293b;
+    border-bottom: 1px solid #334155;
+    overflow-x: auto;
+}
+
+.class-tab {
+    background: #0f172a;
+    color: #94a3b8;
+    border: 1px solid #334155;
+    padding: 6px 16px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+.class-tab.active {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #38bdf8;
+}
+
+/* ==========================================================================
+   ÁREA CENTRAL (CANVAS 3D + CÓDIGO PYTHON)
+   ========================================================================== */
+.top-display {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+/* Canvas 3D */
+#canvasContainer {
+    flex: 1;
+    position: relative;
+    background: #050811;
+    overflow: hidden;
+}
+
+#canvas3d {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#labelsOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.node-label {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid #38bdf8;
+    color: #ffffff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Visualizador de Código Python */
+.code-container {
+    width: 420px;
+    background: #0d1117;
+    border-left: 1px solid #1e293b;
+    display: flex;
+    flex-direction: column;
+}
+
+.code-header {
+    padding: 10px 15px;
+    background: #161b22;
+    color: #38bdf8;
+    font-weight: bold;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #21262d;
+    letter-spacing: 0.5px;
+}
+
+pre#pythonCode {
+    padding: 15px;
+    color: #7ee787;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.8rem;
+    overflow: auto;
+    flex: 1;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   TERMINAL INFERIOR (EXECUÇÃO DE SAÍDA)
+   ========================================================================== */
+.terminal-container {
+    height: 180px;
+    background: #030712;
+    border-top: 1px solid #1e293b;
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.terminal-header {
+    color: #10b981;
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+pre#terminalOutput {
+    color: #38bdf8;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.85rem;
+    flex: 1;
+    overflow-y: auto;
+    margin: 0;
+    white-space: pre-wrap;
+    line-height: 1.4;
+}
+
+.terminal-prompt {
+    color: #64748b;
+}
+
+/* Barra de rolagem customizada */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
