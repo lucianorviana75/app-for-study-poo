@@ -124,3 +124,36 @@ $ python main.py
 * **Edição em Tempo Real**: Altere valores de atributos clicando no ícone de lápis ✏️ para ver o código e o resultado no terminal mudarem instantaneamente.
 * **Remoção de Elementos**: Clique no ícone de xis ❌ ao lado de qualquer atributo ou método para removê-lo da classe.
 * **Arrastar Nós**: Você pode clicar e arrastar os nós no painel central para organizar visualmente o diagrama da forma que preferir.
+
+# 💡 Por Que Criei o POO Visualizer?
+
+A **Programação Orientada a Objetos (POO)** é um dos pilares do desenvolvimento moderno de software, mas compreendê-la no início nem sempre é uma tarefa simples. Conceitos abstractos como *classes*, *instâncias*, *atributos* e *métodos* muitas vezes parecem distantes para quem está dando os primeiros passos na programação.
+
+Observando essa dificuldade comum de aprendizado, criei esta aplicação web interativa com o objetivo de **tornar o aprendizado de POO visual, intuitivo e prático**.
+
+## 🎯 Principais Motivações
+
+### 1. **Transformar Abstração em Visualização Relacional**
+
+Em vez de focar apenas em texto e sintaxe, o aplicativo gera um **diagrama de nós interativo**. Ao criar uma classe, adicionar um atributo ou declarar um método, o usuário enxerga em tempo real como esses elementos se conectam e se relacionam.
+
+### 2. **Feedback Instantâneo (Live Coding & Execution)**
+
+Um dos maiores desafios de quem aprende é entender o que o código faz de verdade. O app ponteia a teoria e a prática ao:
+
+- **Gerar o código Python automaticamente** conforme a interface gráfica é alterada.
+- **Executar a instância e os métodos imediatamente**, exibindo a saída exata (`print`) no console integrado (*Python Runtime*).
+
+### 3. **Consolidação dos Conceitos Fundamentais**
+
+A ferramenta força a estruturação correta do pensamento em POO:
+
+- **Classe** como o modelo principal (nó central).
+- **Atributos** alimentando o construtor `__init__`.
+- **Métodos e Parâmetros** interagindo diretamente com os atributos da instância (`self`).
+
+## 🚀 Tecnologias e Aprendizados
+
+Desenvolver essa ferramenta permitiu explorar a criação de interfaces dinâmicas, integração de compilador/interpretador no front-end, gerenciamento de estado e manipulação gráfica de grafos/nós.
+
+Mais do que resolver um problema pessoal de estudo, o projeto foi concebido como um **recurso educacional prático** para que qualquer pessoa possa experimentar, visualizar e dominar a Orientação a Objetos de forma simples e interativa.
